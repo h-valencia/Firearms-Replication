@@ -1,0 +1,67 @@
+---
+title: "FirearmsReplication"
+author: "Hannah Valencia"
+date: "4/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(dplyr)
+library(tidyverse)
+```
+
+
+```{r, message = FALSE, include = FALSE}
+download.file("https://data.nber.org/mortality/2007/mort2007.csv.zip",
+                           destfile = "mort07.zip")
+unzip("mort07.zip")
+mort07 <- read_csv("mort2007.csv")
+
+mort07 <- mort07 %>%
+  filter(ucod %in% c("W32", "W33", "W34")) %>%
+  select(restatus, monthdth, sex, age, ager52, ager27, ager12, weekday, year, ucod, race, racer3, racer5)
+
+file.remove("mort2007.csv")
+file.remove("mort07.zip")
+```
+
+```{r, message = FALSE, include = FALSE}
+download.file("https://data.nber.org/mortality/2008/mort2008.csv.zip",
+                           destfile = "mort08.zip")
+unzip("mort08.zip")
+mort08 <- read_csv("mort2008.csv")
+
+mort08 <- mort08 %>%
+  filter(ucod %in% c("W32", "W33", "W34")) %>%
+  select(restatus, monthdth, sex, age, ager52, ager27, ager12, weekday, year, ucod, race, racer3, racer5)
+
+file.remove("mort2008.csv")
+file.remove("mort08.zip")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
