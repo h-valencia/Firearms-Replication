@@ -1,0 +1,9 @@
+bckcheck-state-public.dta (application/x-stata) 163111 bytes.
+bckcheck-public.dta (application/x-stata) 1901 bytes.
+bckcheck-state-public-1.dta (application/x-stata) 76910 bytes.
+Google Trends data for Figure 1.xlsx (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet) 13844 bytes.
+inpvs1-public.do (application/x-stata-syntax) 2381 bytes.
+population-age-public.dta (application/x-stata) 1001 bytes.
+population-state-age-public.dta (application/x-stata) 19272 bytes.
+population-state-public.dta (application/x-stata) 8057 bytes.
+readme.txt (text/plain) 2251 bytes.
