@@ -1,0 +1,241 @@
+---
+title: "Replication of *Firearms and accidental deaths: Evidence from the aftermath of the Sandy Hook school shooting*"
+author: "Hannah Valencia"
+date: "4/13/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(haven)
+library(ggplot2)
+library(dplyr)
+library(usmap)
+library(patchwork)
+library(zoo)
+library(readxl)
+library(tidyverse)
+```
+
+
+### Overview
+This replication paper takes a look at gun sales, background checks, and google search data in the aftermath of the Sandy Hook school shooting that took place on December 14th, 2012. It is hard for one to not know about the atrocities that took place in Newtown, Connecticut that day, as innocent school children and their teachers were murdered at school. Since then, many reforms have been put in place for gun control and school safety alike. In the immediate aftermath, however, gun sales and spiked and google searches about buying and cleaning guns soared. People knew that the number of background checks were going to increase to prevent further events like this from happening. This paper analyzes, specifically, whether there was an increase in the number of accidental gun deaths in the five-month period following this event, which could then be attributed to the increase in gun sales. The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children,
+resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine et al. 1).
+
+
+```{r ImportExcel, message = FALSE, warning = FALSE}
+
+# Setting message = FALSE because it is telling us about renaming the columns when we first load in the data, but we are going to be changing these names anyways.
+# Setting warning = FALSE because a warning appears about the date format.
+# Reading in the excel sheet.
+
+google <- read_xlsx("raw-data/dataverse_files/Google Trends data for Figure 1.xlsx", 
+    col_types = c("date", "numeric", "numeric"))
+
+# Removing two rows that are either empty or are just describing the data set.
+
+google <- google[-c(1, 2),]
+
+# Chnaging the column titles to the first row's information.
+
+colnames(google) = google[1, ]
+google = google[-1, ]
+
+colnames(google)[1:3] <- c("week", "clean_gun", "buy_gun")
+
+google$week <- as.Date(google$week , format = "%Y-%m-%d")
+```
+
+```{r ShiftAxis}
+
+# Creating a function for shifting the axis labels to the line y=0 instead of having it hover slightly below. 
+# For aesthetic purposes.
+# Function obtained from https://stackoverflow.com/questions/39071002/moving-x-or-y-axis-together-with-tick-labels-to-the-middle-of-a-single-ggplot-n, user baptiste.
+
+shift_axis <- function(p, y=0){
+  g <- ggplotGrob(p)
+  dummy <- data.frame(y=y)
+  ax <- g[["grobs"]][g$layout$name == "axis-b"][[1]]
+  p + annotation_custom(grid::grobTree(ax, vp = grid::viewport(y=1, height=sum(ax$height))), 
+                        ymax=y, ymin=y) +
+    geom_hline(aes(yintercept=y), data = dummy) +
+    theme(axis.text.x = element_blank(), 
+          axis.ticks.x=element_blank())
+
+}
+```
+
+### Appendix
+#### Figure 1
+```{r CreateGraphic}
+
+# Using ggplot with geom_line to reproduce Fig. 1 from my paper.
+# Creating two lines on the same graph, for google searches of "clean gun" and of "buy gun", each with a different color.
+# Using annotate to create a shaded rectangle in the "Post-Sandy Hook Window" which is the 4 months following the shooting. Set alpha to 0.2 to make it see through.
+# Set the x scale to have breaks every year.
+# Set the y scale to have breaks every 20 from 1 to 120.
+# Added labels to the axes and a caption.
+# Changed the graph theme to look more like the one in the paper being reproduced.
+# Removed the vertical lines and changed the horizontal line darkness and where they are located.
+# Changed the location and size of the caption.
+# Added text onto the graph.
+# Used the shift_axis function to move the labels up to the y=0 line and remove the weird space.
+
+plot <- google %>%
+  ggplot(aes(x = week)) +
+  geom_line(aes(y = clean_gun), color = "black") +
+  geom_line(aes(y = buy_gun), color = "red") +
+  annotate("rect", xmin = as.Date('2012-12-14'), xmax = as.Date('2013-04-14'), ymin = 0, ymax = Inf, alpha = 0.2) +
+  scale_x_date(date_breaks = "1 year", date_minor_breaks = "1 month", date_labels = "%Y") +
+  scale_y_continuous(breaks = c(0, 20, 40, 60, 80, 100, 120), limits = c(0, 120)) +
+  labs(x = "", 
+       y = "Index Value (100 = maximum)", 
+       caption = " Fig. 1. Relative frequency of weekly Google searches that included the terms “clean gun” and \n “buy gun” between 2010 and 2014. This graph uses data from Google Trends (http://trends. \ngoogle.com/) to track weekly patterns in search activity that included each set of words. The week \nwith maximum search volume is indexed to equal 100 and values below 100 reflect relative search \n      activity in proportion to the week with the maximum value.") +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.major.y = element_line( size=0.3, color = "darkgray"),
+        panel.background = element_rect(fill= "white"),
+        plot.caption = element_text(hjust = -0.1, size = 10)) +
+  annotate(geom = "text", x = as.Date('2013-11-15'), y = 96, label = "Post-Sandy Hook Window", size = 3) +
+  annotate(geom = "text", x = as.Date('2010-06-15'), y = 56, label = "'Clean Gun' (black line)", size = 3) +
+  annotate(geom = "text", x = as.Date('2010-05-15'), y = 11.5, label = "'Buy Gun' (red line)", size = 3)
+
+shift_axis(plot, 0)
+```
+
+#### Figure 2
+```{r ReadFiles}
+
+# Reading in files from the dataverse to make manipulation easier later on.
+ 
+bsp <- read_dta("raw-data/dataverse_files/bckcheck-state-public.dta")
+psp <- read_dta("raw-data/dataverse_files/population-state-public.dta")
+```
+
+```{r}
+bsp %>%
+  filter(year >= 2008) %>%
+  group_by(year, month) %>%
+  summarize(total = sum(total)) %>%
+  mutate(sandyhookp1 = year == 2012 & month == 12) %>%
+  mutate(sandyhookp2 = year == 2013 & month == 1) %>%
+  mutate(sandyhookp3 = year == 2013 & month == 2) %>%
+  mutate(sandyhookp4 = year == 2013 & month == 3) %>%
+  mutate(sandyhookp5 = year == 2013 & month == 4)
+```
+```{r, message=FALSE}
+dap <- read_dta("raw-data/deaths-age-public.dta")
+fig2sales <- read_xlsx("raw-data/fig2salesdata.xlsx")
+fig2deaths <- read_xlsx("raw-data/fig2deathsdata.xlsx")
+```
+
+```{r}
+fig2sales$Date <- as.yearmon(paste(fig2sales$year, fig2sales$month), "%Y %m")
+fig2deaths$Date <- as.yearmon(paste(fig2deaths$year), "%Y")
+```
+
+
+```{r}
+ggplot(data = fig2sales, aes(x = Date)) +
+  geom_line(aes(y = resid))
+```
+
+```{r}
+ggplot(data = fig2deaths, aes(x = Date)) +
+  geom_col(aes(y = resid), fill = "lightskyblue3")
+```
+
+
+
+
+#### Figure 3
+
+```{r ReadStataOutput}
+
+# Replicated regression tables in Stata using the replication .do file provided by the author.
+# Author indicated that information relevant to creating the figure was the first coefficient in each state's regression.
+# I manually took these coefficients and the state codes and created a excel file with these two variables.
+# Reading in the excel file.
+
+fig3 <- read_xlsx("raw-data/Fig3Coeffs.xlsx")
+```
+
+```{r JoiningData, warning = FALSE}
+
+# Multiplying the regression coefficient from the excel file by 5, indicating the five month window that the author has defined as the "post-Sandy Hook" window.
+# Renaming the state column to stname to match the column in the other datasets.
+
+fig3 <- fig3 %>%
+  mutate(shcoef = RegCoeff*5) %>%
+  mutate(stname = State) 
+
+# Changing the other dataset from the dataverse so that there is only one row per state.
+# Selecting the state name column and the column with the state FIPS codes.
+# Needed a dataset with the FIPS codes so that I could create the map later on.
+
+fig3a <- bsp %>%
+  distinct(stfips, .keep_all = TRUE) %>%
+  select(stfips, stname)
+
+# Using left join to add the state FIPS codes to the excel dataframe.
+# Renaming the stfips column to fips so that it can be processed by the US map plot.
+
+fig3b <- left_join(fig3, fig3a, by = "stname") %>%
+  mutate(fips = stfips)
+
+# Creating a color column that groups the states into the four categories of gun sales.
+# Have not yet been able to figure out how to break apart the scale into 4 distinct categories, but this seems like it would be a helpful step.
+
+fig3b$color[fig3b$shcoef < 750] = "cream"
+fig3b$color[fig3b$shcoef >= 750 & fig3b$shcoef < 1000] = "yellow"
+fig3b$color[fig3b$shcoef >= 1000 & fig3b$shcoef < 1500] = "orange"
+fig3b$color[fig3b$shcoef >= 1500] = "red"
+fig3b$color[is.na(fig3b$shcoef)] <- "No data"
+```
+
+```{r PlotMap}
+
+# Creating a map of the US with the sandy hook window coefficients for each state.
+# Changed the color of the map to match that of the original. 
+# Changed the direction of the fill so the light colors are the lower numbers and the darker colors are the higher numbers.
+# Used theme to adjust the caption size and the legend position.
+# Added a caption.
+
+plot_usmap(data = fig3b, values = "shcoef") +
+  scale_fill_distiller(palette = "YlOrRd", direction = 1) +
+  theme(legend.position = "right",
+        plot.caption = element_text(hjust = 0, size = 10)) +
+  labs(caption = "       Fig. 3. Variation across states in the increase in firearm sales per 100,000 
+      population in the post–Sandy Hook period. The spike in sales in each state is
+       estimated as the seasonally adjusted and detrended increase in background 
+       checks in the months within the Sandy Hook window. The legend numbers 
+       represent the increase in firearm sales per 100,000 population.")
+```
+
+
+
+
+
+For this milestone, I have been able to replicate Figures 1 and 3 of the paper. I have not yet been able to recreate the table or Figures 2 and 4. The datasets for these figures and tables requires compiling data from the CDC website. To do this, I need to download nine .zip files but when unzipped, each file becomes over 1GB in size. This has overwhelmed my storage, and when trying to do this my computer's disk space filled up. In addition, the files are in an extremely unusual format that needs to somehow be changed into a different format before it can be processed, which I have not yet found out how to do. I have been in contact with the author and my next step is to ask for the compiled dataset or try to compile my own through the CDC Wonder website.
+
+I had a lot of trouble trying to knit as a pdf. The bibliography would not save as just a .bib file. Warnings started coming out of nowhere I have attached the html which is much nicer.
+
+
+### Extension
+
+To test the merits of this paper, I intend to analyze the data from the map above and change the regression model used to create this increase in firearm sales map. I intend to add an interaction term between the month and the number of sales, to see if that changes the coefficient that was used to create these statistics. I also would like to try to extend the time window of the map and the regression to see if these "increase in sales" could be extended throughout the year before Sandy Hook as well, suggesting that the event may not have been the catalyst for the increase. 
+
+
+### Footnote
+This is a PDF document for my Gov 1006 final project Milestone 5. I have a GitHub repo with all relevant materials for this milestone. ^[My GitHub repo can be found following this url: https://github.com/h-valencia/1006-milestone-4]
+
+### References
+
+[@R-ggplot2]
+[@R-knitr]
+[@knitr2015]
+[@knitr2014]
+[@R-ggplot22016]
+[@R-haven]
+[@levine2017firearms]
+[@CDC]
