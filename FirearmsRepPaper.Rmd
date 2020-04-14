@@ -132,18 +132,44 @@ fig2deaths <- read_xlsx("raw-data/fig2deathsdata.xlsx")
 ```{r}
 fig2sales$Date <- as.yearmon(paste(fig2sales$year, fig2sales$month), "%Y %m")
 fig2deaths$Date <- as.yearmon(paste(fig2deaths$year), "%Y")
+
+fig2full <- full_join(fig2sales, fig2deaths, by = "Date") %>%
+  filter(year.x < 2016)
+fig2full[is.na(fig2full)] <- 0
 ```
 
 
-```{r}
-ggplot(data = fig2sales, aes(x = Date)) +
+```{r, warning = FALSE}
+options(scipen=999)
+
+fig2.1 <- ggplot(data = fig2sales, aes(x = Date)) +
   geom_line(aes(y = resid))
+
+fig2.2 <- ggplot(data = fig2deaths, aes(x = Date)) +
+  geom_col(aes(y = resid), fill = "skyblue3", width = 0.4)
+
+ggplot(fig2full, aes(x = Date)) +
+  geom_col(aes(y = resid.y*50000000), fill = "skyblue3", width = 0.4) +
+  geom_line(aes(y = resid.x)) +
+  labs(x = "",
+       caption = "Fig. 2. Seasonally adjusted, detrended monthly firearm sales and accidental firearm death 
+       rates per 100,000 children (ages 0 to 14) between December and April. Firearm sales data 
+       are proxied by NICS data on background checks conducted when a firearm is purchased from 
+       a registered dealer. The accidental firearm death rate is calculated from Vital Statistics 
+       mortality data and SEER population data. The post–Sandy Hook window is defined to be 
+       December 2012 through April 2013") +
+  scale_y_continuous(limits = c(-1200000, 1200000), 
+                     breaks = c(-1200000, -800000, -400000, 0, 400000, 800000, 1200000),
+    name = "Deviations from Expected Monthly Firearm Sales",
+    sec.axis = sec_axis(~./50000000, name="Deviations from Expected Accidental Firearm Death Rates for Children"))
+
+  #theme(panel.grid.major.x = element_blank(),
+        #panel.grid.major.y = element_line( size=0.3, color = "darkgray"),
+        #panel.background = element_rect(fill= "white"),
+        #plot.caption = element_text(hjust = 0, size = 10))
 ```
 
-```{r}
-ggplot(data = fig2deaths, aes(x = Date)) +
-  geom_col(aes(y = resid), fill = "lightskyblue3")
-```
+
 
 
 
