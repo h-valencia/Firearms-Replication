@@ -2,11 +2,15 @@
 title: "Replication of *Firearms and accidental deaths: Evidence from the aftermath of the Sandy Hook school shooting*"
 author: "Hannah Valencia"
 date: "4/13/2020"
-output: html_document
+output: pdf_document
+bibliography: bibliography.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+# Importing all necessary libraries.
+# Setting echo to false so that the chunk code is not produced in the output document. 
 
 library(haven)
 library(ggplot2)
@@ -18,10 +22,21 @@ library(readxl)
 library(tidyverse)
 ```
 
+### Abstract
+Levine and McKnight (2017) show that in the 5-month period following the Sandy Hook school shooting in December 2012, a large spike in gun sales contributed to an increase in accidental firearm deaths.
 
-### Overview
-This replication paper takes a look at gun sales, background checks, and google search data in the aftermath of the Sandy Hook school shooting that took place on December 14th, 2012. It is hard for one to not know about the atrocities that took place in Newtown, Connecticut that day, as innocent school children and their teachers were murdered at school. Since then, many reforms have been put in place for gun control and school safety alike. In the immediate aftermath, however, gun sales and spiked and google searches about buying and cleaning guns soared. People knew that the number of background checks were going to increase to prevent further events like this from happening. This paper analyzes, specifically, whether there was an increase in the number of accidental gun deaths in the five-month period following this event, which could then be attributed to the increase in gun sales. The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children,
+### Introduction
+This replication paper takes a look at gun sales, background checks, and google search data in the aftermath of the Sandy Hook school shooting that took place on December 14th, 2012. It is hard for one to not know about the atrocities that took place in Newtown, Connecticut that day, as innocent school children and their teachers were murdered at school. Since then, many reforms have been put in place for gun control and school safety alike. In the immediate aftermath, however, gun sales spiked and google searches about buying and cleaning guns soared. People knew that the number of background checks were going to increase to prevent further events like this from happening. This paper analyzes, specifically, whether there was an increase in the number of accidental gun deaths in the five-month period following this event, which could then be attributed to the increase in gun sales. The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children,
 resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine et al. 1).
+
+Within this replication, I have made three graphs and a table. The first graph details the change in Google searches about cleaning and buying goods in the years leading up to and following Sandy Hook. There is an obvious spike in the data in the post-Sandy Hook window. The second graph looks at "seasonally adjusted, detrended monthly firearm sales and accidental firearm death rates" among children under the age of 15. And finally the third graph shows a map of the US, with each state colored by the amount increase in firearm sales per 100,000 population in the post-Sandy Hook period (December 2012 - April 2013). To create these graphics, I used datasets that were built using R, CDC NCHS data, Stata, and data obtained through Harvard's Dataverse. All the data used to produce this replication can be found on my GitHub repository. ^[My GitHub repo can be found following this url: https://github.com/h-valencia/1006-milestone-4]
+
+### Literature Review
+In the aftermath of the Sandy Hook Elementary School shooting, President Barack Obama took a stance against guns, calling for stricter gun control legislation. After announcing this, Americans became more interested in owning guns, and Levine and McKnight have estimated an additional 3 million guns were sold in the 5-month period following the shooting. Whether people be buying new guns, or revisiting and cleaning ones that have owned for years, the greater exposure to guns following the shooting may have likely driven an increase in the number of accidental deaths caused by firearms, especially amongst children. When former President Obama spoke about the new gun control legislation in mid-January and mid-February of 2013, search activity about guns spiked immediately. In specific states and areas where gun sales spiked, it was found that the number of accidental deaths also spiked. Although this correlation does not a cause and effect relationship, it should be noted.
+
+Within the models created, there are multiple caveats to consider. Many of the models were created using the CDC National Center for Health Statistics's Vital Statistics mortality data, which are known to underestimate accidental firearm deaths. Another consideration that should be made is that this data only accounts for accidental firearm discharges that resulted in death, it does not include any cases where victims survived, therefore providing a lower bound on the issue at hand. The restrictions imposed on the cause of death we are interested in also limits the data to omit any suicides or homicides due to firearm exposure during this time period. The paper in consideration also only displays short-term implications of increased gun exposure, not long term effects.
+
+In an effort to mitigate the likelihood of school shootings, one proposal has been to arm teachers with guns, giving them a way to protect themselves and their students. There have been, however, instances where teachers then use these weapons against themselves or their students, albeit this does not occur frequently (Buck et al.).
 
 
 ```{r ImportExcel, message = FALSE, warning = FALSE}
@@ -103,6 +118,7 @@ plot <- google %>%
 shift_axis(plot, 0)
 ```
 
+
 #### Figure 2
 ```{r ReadFiles}
 
@@ -112,41 +128,55 @@ bsp <- read_dta("raw-data/dataverse_files/bckcheck-state-public.dta")
 psp <- read_dta("raw-data/dataverse_files/population-state-public.dta")
 ```
 
-```{r}
-bsp %>%
-  filter(year >= 2008) %>%
-  group_by(year, month) %>%
-  summarize(total = sum(total)) %>%
-  mutate(sandyhookp1 = year == 2012 & month == 12) %>%
-  mutate(sandyhookp2 = year == 2013 & month == 1) %>%
-  mutate(sandyhookp3 = year == 2013 & month == 2) %>%
-  mutate(sandyhookp4 = year == 2013 & month == 3) %>%
-  mutate(sandyhookp5 = year == 2013 & month == 4)
-```
-```{r, message=FALSE}
+```{r ReadingStataFig2}
+
+# Reading in data that was created using the Stata replication code provided by the author.
+
 dap <- read_dta("raw-data/deaths-age-public.dta")
 fig2sales <- read_xlsx("raw-data/fig2salesdata.xlsx")
 fig2deaths <- read_xlsx("raw-data/fig2deathsdata.xlsx")
 ```
 
-```{r}
+```{r CreateDate}
+
+# Creating a date column for each dataset to give them a common column.
+# Formatting the date column from already existing year and/or month columns.
+
 fig2sales$Date <- as.yearmon(paste(fig2sales$year, fig2sales$month), "%Y %m")
 fig2deaths$Date <- as.yearmon(paste(fig2deaths$year), "%Y")
 
+# Joining the two dataframes together by the data column.
+# Filtering the year column for earlier than 2016 since this is all that the figure examines.
+
 fig2full <- full_join(fig2sales, fig2deaths, by = "Date") %>%
   filter(year.x < 2016)
+
+# Replacing NAs with 0.
+
 fig2full[is.na(fig2full)] <- 0
 ```
 
 
-```{r, warning = FALSE}
+```{r CreateFig2, warning = FALSE}
+
+# Set warning = FALSE because different x axes result in a warning but do not cause issues within the graph.
+# Using options to make the axes intervals not change to scientific notation.
+
 options(scipen=999)
+
+# Rough plots used as reference.
 
 fig2.1 <- ggplot(data = fig2sales, aes(x = Date)) +
   geom_line(aes(y = resid))
 
 fig2.2 <- ggplot(data = fig2deaths, aes(x = Date)) +
   geom_col(aes(y = resid), fill = "skyblue3", width = 0.4)
+
+# Using ggplot with the combined data set.
+# Adding a geom_col layer for the residual values of the death data multiplied by 50,000,000 to line the axis scale up with the other.
+# Changing the color and width of the bars.
+# Adding a geom_line layer to plot the residual values for the sales data.
+# Added a second axis in the scale_y_continuous to get different scales on each side of the graph.
 
 ggplot(fig2full, aes(x = Date)) +
   geom_col(aes(y = resid.y*50000000), fill = "skyblue3", width = 0.4) +
@@ -252,7 +282,7 @@ I had a lot of trouble trying to knit as a pdf. The bibliography would not save 
 To test the merits of this paper, I intend to analyze the data from the map above and change the regression model used to create this increase in firearm sales map. I intend to add an interaction term between the month and the number of sales, to see if that changes the coefficient that was used to create these statistics. I also would like to try to extend the time window of the map and the regression to see if these "increase in sales" could be extended throughout the year before Sandy Hook as well, suggesting that the event may not have been the catalyst for the increase. 
 
 
-### Footnote
+
 This is a PDF document for my Gov 1006 final project Milestone 5. I have a GitHub repo with all relevant materials for this milestone. ^[My GitHub repo can be found following this url: https://github.com/h-valencia/1006-milestone-4]
 
 ### References
