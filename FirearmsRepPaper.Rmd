@@ -3,7 +3,9 @@ title: 'Replication of *Firearms and accidental deaths: Evidence from the afterm
   of the Sandy Hook school shooting*'
 author: "Hannah Valencia"
 date: "4/13/2020"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 bibliography: bibliography.bib
 ---
 
@@ -411,7 +413,7 @@ plot_usmap(data = fig3b, values = "shcoef") +
 [@R-knitr]
 [@knitr2015]
 [@knitr2014]
-[@R-ggplot22016]
+[@ggplot22]
 [@R-haven]
 [@levine2017firearms]
 [@CDC]
