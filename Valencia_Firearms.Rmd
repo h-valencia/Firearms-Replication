@@ -1,6 +1,6 @@
 ---
-title: 'Replication of *Firearms and accidental deaths: Evidence from the aftermath
-  of the Sandy Hook school shooting*'
+title: 'Levine, McKnight (2017) Paper Replication'
+subtitle: "Gun Exposure and Firearm Deaths post-Sandy Hook"
 author: "Hannah Valencia"
 date: "4/13/2020"
 output: pdf_document
@@ -28,16 +28,13 @@ library(tidyverse)
 Levine and McKnight (2017) show that in the 5-month period following the Sandy Hook school shooting in December 2012, a large spike in gun sales contributed to an increase in accidental firearm deaths. Their findings conclude that there was a spike in accidental firearm deaths resulting from the increase in exposure, which is confirmed in this replication. I was able to successfully replicate most of Levine and McKnight's results. As an extension to this paper, the original linear regression used to determine the increase in firearm sales per 100,000 popoulation in the post-Sandy Hook period was changed to a Bayesian generalized linear model. Even after this change, the results showing increases in certain states hold, backing the authors' claims.  Even though the Sandy Hook shooting showed the need for stricter gun laws, the immediate aftermath of this realization led to the opposite effect as desired: more accidental firearm deaths.
 
 ### Introduction
-This replication paper takes a look at gun sales, background checks, and google search data in the aftermath of the Sandy Hook school shooting that took place on December 14th, 2012. It is hard for one to not know about the atrocities that took place in Newtown, Connecticut that day, as innocent school children and their teachers were murdered at school. Since then, many reforms have been put in place for gun control and school safety alike. In the immediate aftermath, however, gun sales spiked and google searches about buying and cleaning guns soared. People knew that the number of background checks were going to increase to prevent further events like this from happening. This paper analyzes, specifically, whether there was an increase in the number of accidental gun deaths in the five-month period following this event, which could then be attributed to the increase in gun sales. The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children,
-resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine, McKnight 1).
+This replication paper takes a look at gun sales, background checks, and google search data in the aftermath of the Sandy Hook school shooting that took place on December 14th, 2012. It is hard for one to not know about the atrocities that took place in Newtown, Connecticut that day, as innocent school children and their teachers were murdered at school. Since then, many reforms have been put in place for gun control and school safety alike. In the immediate aftermath, however, gun sales spiked and google searches about buying and cleaning guns soared. People knew that the number of background checks were going to increase to prevent further events like this from happening. This paper analyzes, specifically, whether there was an increase in the number of accidental gun deaths in the five-month period following this event, which could then be attributed to the increase in gun sales. The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children, resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine, McKnight 1).
 
-Within this replication, I used both Stata and R (R Core Team, 2019) to replicate some of the figures in the original article. The data and replication code were obtained from the Harvard Dataverse ^[The replication data and programs for this paper can be found at https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EVLKBN] and through the CDC NCHS ^[In replicating the author's code, I was instructed to compile mortality statistics from https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm]. The first graph details the change in Google searches about cleaning and buying goods in the years leading up to and following Sandy Hook. There is an obvious spike in the data in the post-Sandy Hook window. The second graph looks at "seasonally adjusted, detrended monthly firearm sales and accidental firearm death rates" among children under the age of 15. And finally the third graph shows a map of the US, with each state colored by the amount increase in firearm sales per 100,000 population in the post-Sandy Hook period (December 2012 - April 2013). All the data used to produce this replication can be found on my GitHub repository. ^[My GitHub repo can be found following this url: https://github.com/h-valencia/1006-milestone-4]
+Within this replication, I used both Stata and R (R Core Team, 2019) to replicate some of the figures in the original article. The data and replication code were obtained from the Harvard Dataverse ^[The replication data and programs for this paper can be found at https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EVLKBN] and through the CDC NCHS ^[In replicating the author's code, I was instructed to compile mortality statistics from https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm]. The first graph details the change in Google searches about cleaning and buying guns in the years leading up to and following Sandy Hook. There is an obvious spike in the data in the post-Sandy Hook window. The second graph looks at "seasonally adjusted, detrended monthly firearm sales and accidental firearm death rates" among children under the age of 15. And finally the third graph shows a map of the US, with each state colored by the amount increase in firearm sales per 100,000 population in the post-Sandy Hook period (December 2012 - April 2013). All the data used to produce this replication can be found on my GitHub repository. ^[My GitHub repo can be found following this url: https://github.com/h-valencia/1006-milestone-4]
 
-Through my replication of the authors' code, I found many of the same results. I was able to successfully replicate Levine and McKnight's results, with the exception of deviations from expected accidental firearm death rate, as it required using private mortality data. I ran much of the replication using their original Stata code provided by the authors, then transfered the results to R in order to more acurately replicate the figures. The private morality data prevented me from replicating the fourth figure and the table. Through my replication of figure 1, I confirmed the author's findings that there was a very large spike in Google searches of buying and cleaning guns in the aftermath of Sandy Hook. Through my replication of figure 3, I also found that gun sales increased after Sandy Hook in almost all states to varying degrees. Although I did not replicate the figure 2 graph, I did replicate the data tables that were used in making it. The results of these tables confirmed the authors' findings that there was a spike in firearm death rates for children after Sandy Hook and at the same time as an increase in monthly firearm sales.
+Through my replication of the authors' code, I found many of the same results. I was able to successfully replicate Levine and McKnight's results, with the exception of deviations from expected accidental firearm death rate, as it required using private mortality data. I ran much of the replication using the original Stata code provided by the authors, then transfered the results to R in order to more acurately replicate the figures. The private morality data prevented me from replicating the fourth figure and the table. Through my replication of figure 1, I confirmed the author's findings that there was a very large spike in Google searches of buying and cleaning guns in the aftermath of Sandy Hook. Through my replication of figure 3, I also found that gun sales increased after Sandy Hook in almost all states to varying degrees. Although I did not replicate the figure 2 graph, I did replicate the data tables that were used in making it. The results of these tables confirmed the authors' findings that there was a spike in firearm death rates for children after Sandy Hook and at the same time as an increase in monthly firearm sales.
 
-In the original paper, the authors concluded that there was "an additional 60 deaths overall, including 20 children,
-resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine, McKnight 1). Since these quantified increases were found using private mortality data from the NCHS, I was unable to replicate these findings and get an exact number of additional deaths. Figure 4 shows a generalized view of this increase by showing that states with large per capita sales increases had a spike in deviations from expected accidental firearm death rates in the post-Sandy Hook window. 
-
+In the original paper, the authors concluded that there was "an additional 60 deaths overall, including 20 children, resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine, McKnight 1). Since these quantified increases were found using private mortality data from the NCHS, I was unable to replicate these findings and get an exact number of additional deaths. Figure 4 shows a generalized view of this increase by showing that states with large per capita sales increases had a spike in deviations from expected accidental firearm death rates in the post-Sandy Hook window. 
 
 
 ### Literature Review
@@ -45,11 +42,11 @@ In the aftermath of the Sandy Hook Elementary School shooting, President Barack 
 
 Within the models created, there are multiple caveats to consider. Many of the models were created using the CDC National Center for Health Statistics's Vital Statistics mortality data, which are known to underestimate accidental firearm deaths. Another consideration that should be made is that this data only accounts for accidental firearm discharges that resulted in death, it does not include any cases where victims survived, therefore providing a lower bound on the issue at hand. The restrictions imposed on the cause of death we are interested in also limits the data to omit any suicides or homicides due to firearm exposure during this time period. The paper also only displays short-term implications of increased gun exposure, not long term effects.
 
-In an effort to mitigate the likelihood of school shootings, one proposal has been to arm teachers with guns, giving them a way to protect themselves and their students. There have been, however, instances where teachers then use these weapons against themselves or their students, albeit this does not occur frequently (Buck et al.).
+Through other research papers, it has been reported that the sharp increase in gun sales following Sandy Hook and President Obama's dialog on gun control legislation also led to stock-out, rationing, and shortages of ammunition. The ammunition shortages in early 2013 affected the retailers greatly, but it also led to a short supply among local law enforcement agencies. In the paper *The U.S. Gun-Control Paradox: Gun Buyer Response to Congressional Gun-Control Initiatives*, authors Jones and Stone state, "Supplies became so low that many city police and sheriff's departments had to suspend firearms training and practice at firing ranges" (Jones, Stone 2015). Background checks conducted increased by 60% in the first 6 months of 2013, part of which can almost certainly be attributed to increased gun sales. The paradox of an increase in gun exposure while the government proposes legislation in restricting sales was an issue following the attack, and could arise again at further attempts by the government to limit firearm exposure (Jones, Stone 2015).
 
-Through other research papers, it has been reported that the sharp increase in gun sales following Sandy Hook and President Obama's dialog on gun control legislation also led to stock-out, rationing, and shortages of ammunition. Background checks conducted increased by 60% in the first 6 months of 2013, part of which can almost certainly be attributed to increased gun sales. The paradox of an increase in gun exposure while the government proposes legislation in restricting sales was an issue following the attack, and could arise again at further attempts by the government to limit firearm exposure (Jones, Stone 167).
+"Background checks in 2013 represented an 8 percent increase over 2012, and almost doubled  the  number  conducted  in  2007. In  descending  order  the  three  highest  months  on  record  for  background checks were: December 2012, January 2013 and February 2013" (Jones, Stone 2015). This increase in background checks is not identical to the number of firearm sales, as not every background results in the purchase of a gun. Private firearm sales also go unaccounted for, and since most US firearm manufacturers are privately owned, they are not required to report their sales. 
 
-"Background checks in 2013 represented an 8 percent increase over 2012, and almost doubled  the  number  conducted  in  2007. In  descending  order  the  three  highest  months  on  record  for  background checks were: December 2012, January 2013 and February 2013" (Jones, Stone 170). This increase in background checks is not identical to the number of firearm sales, as not every background results in the purchase of a gun. Private firearm sales also go unaccounted for, and since most US firearm manufacturers are privately owned, they are not required to report their sales. 
+In the paper *Responding to violence with guns: Mass shootings and gun acquisition*, author Wallace claims, "Appraisal Theory suggests that mass shootings contribute to fear of victimization through media expsire. Desire for self-protection is the primary reason many individuals own and purchase guns" (Wallace 2015). After examining the effects of six mass shootings between 2000 and 2010, Wallace claims her results "indicate a positive but delayed association between mass shootings and the number of NICS background checks" which are used in the purchasing of guns. This evidence supports the claims addressed by Levine and McKnight, as well as the claims of Jones and Stone, affirming the gun-control paradox and consumer responses to mass shootings. 
 
 
 ### Replication
@@ -60,14 +57,16 @@ One difference between my replication and the original code was in the creation 
 
 In addition, the replication code provided by the authors did not output any of the figures that they included in their papers, rather just the tables and data used in creating them. To accommodate for this, I created the figures in R to the best of my ability without any replication code to follow. Therefore, these figures may differ slightly from those in the original code.
 
+My replication of Figure 3 differs slightly from that included in the authors' original paper, as my map did not separate the number ranges into distinct categories, rather it produces a continuous scale which I could not figure out how to change. However, overall the maps look very similar and show much of the same trends as to which states had the largest and smallest increases in firearm sales. 
+
+In my attempt to replicate the table, the data I was using had the correct number of observations and I was able to run the first two panels through state without issue. However, I was not able to run the bottom two panels to replicate due to the private data and issues with my compiled data set. The output of running the replication of the first two panels was very messy and did not prodcuce a nice table like the one in the original paper, but I was able to get the same results. For the first panel, the number of deaths estimated had a high standard deviation, which drew some concern. Seeing as how I could not producce the exact same table as the original paper, or even a nice output of the first two panels, I omitted any replication of this from my paper but attached a copy of the original, which summarizes the main results.
+
 
 
 ### Extension
 
 As an extension to this paper, the original linear regression used to determine the increase in firearm sales per 100,000 popoulation in the post-Sandy Hook period was changed to a Bayesian generalized linear model. The simulation was run through Stata for each state, giving an estimated mean coefficient, standard deviation, MCSE, and 95% CI. The graph of box plots shows the mean estimate of the coefficient and the bounds of the 95% CI for this coefficient. Even after the change in regression type, the resuts showing increases in certain states hold and the linear model coefficient falls within the CI, backing the authors' claims.
 
-### Figures and Tables
-#### Plot of Extension
 ```{r ReadStataOutput, warning = FALSE}
 
 # Replicated regression tables in Stata using the replication .do file provided by the author.
@@ -107,6 +106,7 @@ extplot <- ggplot(fig3ext, aes(x = reorder(State, glmCoeff), y = glmCoeff)) +
 extplot
 ```
 
+#### Discussion
 This graph plots the 95% Condifence Intervals for the regression coefficients of increases in firearm sales per 100,000 population per month in the 5-month period following the Sandy Hook shooting. Maryland recorded a decline in firearm sales during this time, whereas states like New Hampshire and Alaska had sales increase by 400-500 per 100,000 per month. In the immediate aftermath of the attack, some states took gun control matters into their own hands, not waiting for a federal law to pass. 
 
 On April 4th, 2013, Maryland passed governor Martin O'Malley's Firearms Safety Act of 2013, prohibiting the purchase of 45 types of assault weapons and limiting gun magazines to 10 rounds. The Act also requires new gun owners to have handgun licensing and undergo fingerprinting, and bans anyone who has been involuntarily committed to a mental health facility from buying a gun.
@@ -122,10 +122,39 @@ On the other end of the spectrum, New Hampshire had the largest increase in gun 
 In this model, the orange dot represents the Bayesian glm coefficient for each state, and the grey dot represents the standard linear regression coefficient. The yellow bars represent the 95% confidence interval for the Bayesian glm regression coefficient. For example, Alabama has an estimated increase in gun sales per 100,000 population per month of 102.7, with uncertainty 29.3. We are 95% confident that the true increase is between 43.1 and 156.9. 
 
 
+### Conclusion
+In the original paper, authors Levine and McKnight looked at the change in firearm exposure and accidental firearm deaths in the aftermath of the Sandy Hook school shooting of December 2012. Following the shooting, people's expectations about gun control and background checks shifted, with many believing it would become more difficult to obtain a gun. In response to these shifted expectations, gun sales in the months following the Sandy Hook shooting soared, with an estimated 3 million additional firearms sold. Google searches about buying and cleaning guns also increased dramatically. In the paper, the authors looked at how this increase in gun exposure from people buying new guns or cleaning old ones contributed to an increase in accidental firearm deaths in the 5-month period following Sandy Hook (December 2012 - April 2013). The authors also took a look at accidental firearm deaths by state, so that they could see whether states with a larger increase in firearm sales also had an increase in the accidental deaths. To run this analysis, they calculated death rates among children and among adults and ran regressions, controlling for trends and seasonal patterns. In the end, the authors concluded that "an additional 60 deaths overall, including 20 children, resulted from unintentional shootings in the immediate aftermath of Sandy Hook" (Levine, McKnight 1).
+
+In my replication of this paper, I used both Stata and R. The authors' original code was provided in Stata, so I ran as much of the results through there as I could, then saved the output as an Excel file. I then used the Excel file to create the replication figures in R, as I was more familiar with the formatting and commands. The data I used to create this replication was gathered from Harvard's Dataverse ^[The replication data and programs for this paper can be found at https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/EVLKBN] and through the CDC NCHS ^[In replicating the author's code, I was instructed to compile mortality statistics from https://www.cdc.gov/nchs/data_access/vitalstatsonline.htm]. The first graph details Google search trends, showing how in the 5-month post-Sandy Hook window, there was a steep spike in searches that contained the phrases "buy guns" and "clean guns". The second figure details deviations from the expected accidental firearm death rates for children and from expected monthly firearm sales, both of which show a spike in the post-Sandy Hook window. The third figure is a map of the United States that shows the increase in firearms sales per 100,000 population in the post-Sandy Hook window by state. The data used in this figure was detrended and seasonally adjusted.
+
+Through my replication, I found many of the same results as the authors for figures 1 through 3. However, due to the private nature of a key dataset, I was not able to determine the estimated number of additional deaths due to the increase in firearm exposure. The authors used a private mortality dataset in their analyses, so without this data I was unable to replicate one of the figures and one the table. The fourth figure that uses this data is a bar chart of the deviations from expected accidental firearm death rates per 100,000 children in the post-Sandy Hook window, for states with large and small increases in gun sales rates. This graph shows that states with large per capital sales increases had a large deviation, while states with small per capital sales increases showed very little deviation from the expected. Additionally, the table that the authors created again using the private mortality data estimated the impact of Sandy Hook and gun-sales spikes on the number of monthly accidental firearm deaths per 100,000 population. It was through this table that the authors determined there were approximately 60 additional firearm deaths that resulted from unintentional shootings in the immediate aftermath of Sandy Hook. 
+
+The results of this paper show the paradox that arises in the United States when there is a push for increased gun regulations: the more people push for reform and stricter laws, the more guns that are sold. Although some states passed their own gun-control laws in the aftermath of Sandy Hook, many did not, and the Federal government failed to do so as well. It would be interesting to see if other shootings either before or after Sandy Hook triggered the same response. It would also be interesting to observe data from other countries similar to the United States and their responses to similar issues. For example, in April of 2020, there was a mass shooting in the Canadian province of Nova Scotia. Canada responded by banning assault-style guns, but did Canadians forsee this change and also increase their exposure to guns? If the United States ever wants to impose stricter firearm measures, the government should be wary of the harm it can do leading up to it. Another discussion that this study could lead to is how state legislation surrounding gun control or a state's general political view mitigates or intensifies the effects citizens' repsonses to mass shootings.
+
+
+### References
+
+[@R-ggplot2]
+[@R-knitr]
+[@knitr2015]
+[@knitr2014]
+[@ggplot22]
+[@R-haven]
+[@levine2017firearms]
+[@CDC]
+[@R]
+[@wallace2015]
+[@JonesStone2015]
+
 
 ### Appendix
+Results from Levine, McKnight (2017) were successfully replicated. As an example, here is Figure 1 from page 358.
+
+#### Figure 1 Original
+![](raw-data/fig11006.jpg)
+
 #### Figure 1 Replication
-```{r ImportExcel, message = FALSE, warning = FALSE, echo = TRUE}
+```{r ImportExcel, message = FALSE, warning = FALSE}
 
 # Setting message = FALSE because it is telling us about renaming the columns when we first load in the data, but we are going to be changing these names anyways.
 # Setting warning = FALSE because a warning appears about the date format.
@@ -148,7 +177,7 @@ colnames(google)[1:3] <- c("week", "clean_gun", "buy_gun")
 google$week <- as.Date(google$week , format = "%Y-%m-%d")
 ```
 
-```{r ShiftAxis, echo = TRUE}
+```{r ShiftAxis}
 
 # Creating a function for shifting the axis labels to the line y=0 instead of having it hover slightly below. 
 # For aesthetic purposes.
@@ -166,7 +195,7 @@ shift_axis <- function(p, y=0){
 }
 ```
 
-```{r CreateGraphic, echo = TRUE}
+```{r CreateGraphic}
 
 # Using ggplot with geom_line to reproduce Fig. 1 from my paper.
 # Creating two lines on the same graph, for google searches of "clean gun" and of "buy gun", each with a different color.
@@ -203,27 +232,14 @@ shift_axis(plot, 0)
 
 
 
-#### Figure 1 Original
-![](raw-data/figure1original.png)
+```{r Figure3Replication, include = FALSE}
 
-
-
-#### Figure 2 Original
-![](raw-data/fig2original.png)
-
-
-
-#### Figure 3 Replication
-```{r ReadFiles}
-
+# Figure 3 Replication
 # Reading in files from the dataverse to make manipulation easier later on.
  
 bsp <- read_dta("raw-data/dataverse_files/bckcheck-state-public.dta")
 psp <- read_dta("raw-data/dataverse_files/population-state-public.dta")
 dap <- read_dta("raw-data/deaths-age-public.dta")
-```
-
-```{r JoiningData, warning= FALSE}
 
 # Changing the other dataset from the dataverse so that there is only one row per state.
 # Selecting the state name column and the column with the state FIPS codes.
@@ -238,9 +254,6 @@ fig3a <- bsp %>%
 
 fig3b <- left_join(fig3, fig3a, by = "stname") %>%
   mutate(fips = stfips)
-```
-
-```{r PlotMap, echo = TRUE}
 
 # Creating a map of the US with the sandy hook window coefficients for each state.
 # Changed the color of the map to match that of the original. 
@@ -258,33 +271,3 @@ plot_usmap(data = fig3b, values = "shcoef") +
        checks in the months within the Sandy Hook window. The legend numbers 
        represent the increase in firearm sales per 100,000 population.")
 ```
-
-
-
-#### Figure 3 Original
-![](raw-data/figure3original.png)
-
-
-
-#### Figure 4 Original
-![](raw-data/fig4original.png)
-
-
-#### Table 1 
-![](raw-data/table1.png)
-
-
-
-
-
-### References
-
-[@R-ggplot2]
-[@R-knitr]
-[@knitr2015]
-[@knitr2014]
-[@ggplot22]
-[@R-haven]
-[@levine2017firearms]
-[@CDC]
-[@R]
