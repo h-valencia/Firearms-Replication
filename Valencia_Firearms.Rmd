@@ -85,7 +85,7 @@ fig3 <- fig3 %>%
   mutate(stname = State) 
 ```
 
-```{r ExtBox}
+```{r ExtBoxPlot}
 fig3ext <- fig3 %>%
   filter(!State %in% c("UT", "KY", "NC"))
 
