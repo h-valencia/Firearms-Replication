@@ -132,21 +132,6 @@ Through my replication, I found many of the same results as the authors for figu
 The results of this paper show the paradox that arises in the United States when there is a push for increased gun regulations: the more people push for reform and stricter laws, the more guns that are sold. Although some states passed their own gun-control laws in the aftermath of Sandy Hook, many did not, and the Federal government failed to do so as well. It would be interesting to see if other shootings either before or after Sandy Hook triggered the same response. It would also be interesting to observe data from other countries similar to the United States and their responses to similar issues. For example, in April of 2020, there was a mass shooting in the Canadian province of Nova Scotia. Canada responded by banning assault-style guns, but did Canadians forsee this change and also increase their exposure to guns? If the United States ever wants to impose stricter firearm measures, the government should be wary of the harm it can do leading up to it. Another discussion that this study could lead to is how state legislation surrounding gun control or a state's general political view mitigates or intensifies the effects citizens' repsonses to mass shootings.
 
 
-### References
-
-[@R-ggplot2]
-[@R-knitr]
-[@knitr2015]
-[@knitr2014]
-[@ggplot22]
-[@R-haven]
-[@levine2017firearms]
-[@CDC]
-[@R]
-[@wallace2015]
-[@JonesStone2015]
-
-
 ### Appendix
 Results from Levine, McKnight (2017) were successfully replicated. As an example, here is Figure 1 from page 358.
 
@@ -271,3 +256,18 @@ plot_usmap(data = fig3b, values = "shcoef") +
        checks in the months within the Sandy Hook window. The legend numbers 
        represent the increase in firearm sales per 100,000 population.")
 ```
+
+
+### References
+
+[@R-ggplot2]
+[@R-knitr]
+[@knitr2015]
+[@knitr2014]
+[@ggplot22]
+[@R-haven]
+[@levine2017firearms]
+[@CDC]
+[@R]
+[@wallace2015]
+[@JonesStone2015]
