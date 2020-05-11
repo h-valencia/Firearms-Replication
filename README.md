@@ -1,4 +1,4 @@
-# Firearms-Replication
+# Final Paper Replication
 
 This is a replication of the paper *Firearms and accidental deaths: Evidence from the aftermath of the Sandy Hook school shooting* by Phillip B. Levine and Robin McKnight for my Government 1006 final project at Harvard University.
 
